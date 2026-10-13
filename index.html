@@ -202,15 +202,16 @@ const KD = {};
 KD.SHOPS = [
   {
     name: 'X8 GROUP',
-    intro: '',        // 店舗紹介文
-    price: '',        // SNS初回の料金
-    hours: '',        // 利用できる時間
-    conditions: '',   // 利用条件
-    reserve: '',      // 予約方法(文章)
+    intro: 'はじめての方も、診断結果をご提示いただくだけでご案内します。ホスホスのページもあわせてご覧のうえ、DMでご連絡ください。',        // 店舗紹介文
+    price: '無料（診断結果の画像をご提示の方）',        // SNS初回の料金
+    hours: '60分',        // 利用できる時間
+    conditions: '診断結果の画像をスタッフにご提示',   // 利用条件
+    reserve: 'Instagram・X・TikTokのDMにて受付中です',      // 予約方法(文章)
     contactUrl: '',   // 予約・問い合わせのURL(LINEなど)  例: "https://line.me/..."
-    x: '',            // 公式X
-    instagram: '',    // 公式Instagram
-    tiktok: '',       // 公式TikTok
+    x: 'https://x.com/kabukichobar000',            // 公式X
+    instagram: 'https://instagram.com/x8._x8group',    // 公式Instagram
+    tiktok: 'https://lite.tiktok.com/t/ZS9UeqXX5P8LG-vE5Nz/',       // 公式TikTok
+    hosuhosu: 'https://www.host2.jp/shop/gr8/index_sp.html',     // ホスホスのページURL
     site: '',         // 公式サイト
     map: ''           // 地図・アクセスのURL
   }
@@ -666,11 +667,11 @@ function isUrl(u) { return /^https?:\/\//i.test(u || ''); }
 function IntroScreen(props) {
   const t = props.type;
   return h('section', { className: 'screen intro', style: { '--tc': t.rgb } },
-    h('div', { className: 'intro-head' }, h('h1', null, 'はじめての歌舞伎町、', h('br'), '体験してみない？'), h('p', null, '気になるお店を見つけて、ホストクラブの雰囲気を楽しもう♡')),
+    h('div', { className: 'intro-head' }, h('h1', null, '診断結果をご提示で、', h('br'), 'SNS初回60分無料'), h('p', null, 'はじめての方にも、安心してお楽しみいただける初回のご案内です。')),
     h('div', { className: 'tmsg', id: 'type-msg' }, h(Ava, { k: t.key, label: t.cname }), h('p', null, t.shop)),
-    h('div', { className: 'card' }, h('h2', null, 'SNS初回ってなに？'), h('p', null, 'SNSなどを通じて案内される、はじめてのお客様向けの来店プランのことです。料金・時間・条件はお店ごとに異なるので、必ず事前に確認してね。')),
-    h('div', { className: 'card' }, h('h2', null, 'はじめての人へ'), h('ol', { className: 'how' },
-      h('li', null, '気になるお店の公式SNSやサイトをチェック'), h('li', null, '料金・利用時間・条件を事前に確認'), h('li', null, '予約・問い合わせ先から連絡'), h('li', null, '予算を決めて、無理のない範囲で楽しむ'))),
+    h('div', { className: 'card' }, h('h2', null, 'SNS初回について'), h('p', null, 'SNSをご覧いただいた、はじめてのお客様向けのご案内です。診断結果の画像をご提示いただくと、60分無料でホストクラブの雰囲気を体験できます。内容は変更になる場合がございますので、ご予約の際にDMでご確認ください。')),
+    h('div', { className: 'card' }, h('h2', null, 'ご来店までの流れ'), h('ol', { className: 'how' },
+      h('li', null, '診断結果の画像を保存（スクリーンショット可）'), h('li', null, 'Instagram・X・TikTokのDMで「診断を見ました」とご連絡'), h('li', null, 'DMでご来店の日時を決めてご予約'), h('li', null, '当日、診断結果の画像をご提示のうえ、60分ご体験'))),
     KD.SHOPS.map(function (s, i) {
       const socials = [['公式X', s.x], ['公式Instagram', s.instagram], ['公式TikTok', s.tiktok]].filter(function (p) { return isUrl(p[1]); });
       return h('div', { className: 'card shop', key: i },
@@ -678,10 +679,11 @@ function IntroScreen(props) {
         h('p', { className: s.intro ? '' : 'na', style: { margin: '4px 0 10px', color: s.intro ? undefined : '#a58bb8' } }, s.intro || '店舗紹介は準備中です。'),
         h('dl', { className: 'info' }, h(Field, { label: 'SNS初回料金', v: s.price }), h(Field, { label: '利用時間', v: s.hours }), h(Field, { label: '利用条件', v: s.conditions }), h(Field, { label: '予約方法', v: s.reserve })),
         h('div', { className: 'link-grid' },
-          socials.length ? socials.map(function (p) { return h('a', { key: p[0], className: 'btn sm sub', href: p[1], target: '_blank', rel: 'noopener noreferrer' }, p[0] + 'を見る'); }) : h('button', { className: 'btn sm sub', disabled: true }, '公式SNSを見る（準備中）'),
-          isUrl(s.site) ? h('a', { className: 'btn sm sub', href: s.site, target: '_blank', rel: 'noopener noreferrer' }, '店舗サイトを見る') : h('button', { className: 'btn sm sub', disabled: true }, '店舗サイトを見る（準備中）'),
-          isUrl(s.map) ? h('a', { className: 'btn sm sub', href: s.map, target: '_blank', rel: 'noopener noreferrer' }, '地図・アクセスを見る') : null,
-          isUrl(s.contactUrl) ? h('a', { className: 'btn', id: 'contact-btn', href: s.contactUrl, target: '_blank', rel: 'noopener noreferrer' }, '予約・問い合わせ') : h('button', { className: 'btn', id: 'contact-btn', disabled: true }, '予約・問い合わせ（準備中）')));
+          [['Instagram', s.instagram], ['X', s.x], ['TikTok', s.tiktok], ['ホスホス', s.hosuhosu], ['店舗サイト', s.site], ['地図・アクセス', s.map]].map(function (p) {
+            if (isUrl(p[1])) return h('a', { key: p[0], className: 'btn sm sub', href: p[1], target: '_blank', rel: 'noopener noreferrer' }, p[0] + 'を見る');
+            return (p[0] === '店舗サイト' || p[0] === '地図・アクセス') ? null : h('button', { key: p[0], className: 'btn sm sub', disabled: true }, p[0] + '（準備中）');
+          }),
+          isUrl(s.contactUrl || s.instagram) ? h('a', { className: 'btn', id: 'contact-btn', href: s.contactUrl || s.instagram, target: '_blank', rel: 'noopener noreferrer' }, 'DMで予約・問い合わせ') : h('button', { className: 'btn', id: 'contact-btn', disabled: true }, 'DMで予約・問い合わせ（準備中）')));
     }),
     h('button', { className: 'btn ghost', id: 'back-result', onClick: function () { KSnd.play('back'); props.onBack(); } }, '診断結果に戻る'),
     h('p', { className: 'disc' }, '来店や支出をすすめるものではありません。お酒は20歳になってから。料金や条件は必ず各店舗にご確認ください。個人情報の入力や会員登録は必要ありません。'));
